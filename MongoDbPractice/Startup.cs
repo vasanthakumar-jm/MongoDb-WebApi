@@ -8,6 +8,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDbPractice.Models;
+using MongoDbPractice.Repositories;
+using MongoDbPractice.Repositories.Interfaces;
 using MongoDbPractice.Services;
 using System;
 using System.Collections.Generic;
@@ -34,7 +36,10 @@ namespace MongoDbPractice
             services.AddSingleton<IEmployeeDatabaseSettings>(sp =>
                 sp.GetRequiredService<IOptions<EmployeeDatabaseSettings>>().Value);
 
-            services.AddSingleton<EmployeeService>();
+            services.AddScoped<EmployeeService>();
+            services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+            services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            services.AddScoped<IMongoDBContext, MongoDBContext>();
             services.AddControllers();
         }
 
